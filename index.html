@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sorting Lab</title>
+  <meta name="description" content="Visualizador e benchmark de algoritmos de ordenação (bubble, selection, insertion, shell, merge, quick e heap), em JavaScript puro.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d1117'/%3E%3Crect x='5' y='18' width='4' height='9' fill='%2358a6ff'/%3E%3Crect x='11' y='12' width='4' height='15' fill='%2358a6ff'/%3E%3Crect x='17' y='7' width='4' height='20' fill='%2358a6ff'/%3E%3Crect x='23' y='14' width='4' height='13' fill='%233fb950'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+
+  <header class="topo">
+    <h1>Sorting Lab</h1>
+    <p class="sub">Veja algoritmos de ordenação trabalhando e meça o custo de cada um.</p>
+    <div class="abas" role="tablist" aria-label="Seções">
+      <button role="tab" id="aba-vis" aria-controls="painel-vis" aria-selected="true">Visualizador</button>
+      <button role="tab" id="aba-bench" aria-controls="painel-bench" aria-selected="false" tabindex="-1">Benchmark</button>
+      <button role="tab" id="aba-sobre" aria-controls="painel-sobre" aria-selected="false" tabindex="-1">Sobre</button>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <!-- ===== Visualizador ===== -->
+    <section id="painel-vis" role="tabpanel" aria-labelledby="aba-vis">
+      <div class="controles">
+        <label>Algoritmo
+          <select id="vis-alg"></select>
+        </label>
+        <label>Dados
+          <select id="vis-kind"></select>
+        </label>
+        <label><span>Tamanho: <output id="vis-n-out">60</output></span>
+          <input id="vis-n" type="range" min="8" max="300" value="60">
+        </label>
+        <label><span>Velocidade</span>
+          <input id="vis-speed" type="range" min="1" max="60" value="30">
+        </label>
+      </div>
+      <div class="botoes">
+        <button id="vis-play" class="primario" type="button">Executar</button>
+        <button id="vis-step" type="button">Passo</button>
+        <button id="vis-finish" type="button">Terminar</button>
+        <button id="vis-reset" type="button">Novos dados</button>
+      </div>
+
+      <canvas id="vis-canvas" role="img" aria-label="Barras representando o array a ordenar"></canvas>
+      <p id="vis-status" class="status" role="status" aria-live="polite">Pronto.</p>
+
+      <dl class="metricas">
+        <div><dt>Comparações</dt><dd id="m-cmp">0</dd></div>
+        <div><dt>Escritas no array</dt><dd id="m-wr">0</dd></div>
+        <div><dt>Trocas</dt><dd id="m-sw">0</dd></div>
+        <div><dt>Etapa</dt><dd id="m-step">0 / 0</dd></div>
+      </dl>
+
+      <div id="vis-info" class="info"></div>
+    </section>
+
+    <!-- ===== Benchmark ===== -->
+    <section id="painel-bench" role="tabpanel" aria-labelledby="aba-bench" hidden>
+      <div class="bench-grade">
+        <fieldset>
+          <legend>Algoritmos</legend>
+          <div id="bench-algs" class="opcoes"></div>
+        </fieldset>
+        <fieldset>
+          <legend>Tamanhos (n)</legend>
+          <div id="bench-sizes" class="opcoes"></div>
+        </fieldset>
+        <div class="controles">
+          <label>Dados
+            <select id="bench-kind"></select>
+          </label>
+          <label>Repetições
+            <input id="bench-reps" type="number" min="1" max="9" value="3">
+          </label>
+        </div>
+      </div>
+      <div class="botoes">
+        <button id="bench-run" class="primario" type="button">Executar benchmark</button>
+        <button id="bench-cancel" type="button" disabled>Cancelar</button>
+      </div>
+      <p id="bench-aviso" class="aviso" hidden></p>
+      <p id="bench-status" class="status" role="status" aria-live="polite">Escolha algoritmos e tamanhos e clique em Executar.</p>
+      <progress id="bench-progress" max="1" value="0" hidden></progress>
+
+      <canvas id="bench-canvas" role="img" aria-label="Gráfico de tempo por tamanho (escala logarítmica). Os mesmos dados estão na tabela abaixo." hidden></canvas>
+      <div id="bench-legenda" class="legenda"></div>
+
+      <div class="tabela-wrap">
+        <table id="bench-tabela" hidden>
+          <caption>Resultados (tempo = mediana das repetições)</caption>
+          <thead><tr><th>Algoritmo</th><th>n</th><th>Tempo (ms)</th><th>Comparações</th><th>Escritas</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="nota">Comparações e escritas são exatas e reproduzíveis. O <strong>tempo</strong> é medido no seu navegador, com a instrumentação do laboratório ligada: use-o para comparar algoritmos entre si, não como medida absoluta de velocidade. Varia entre execuções e entre máquinas, e os navegadores arredondam o relógio (cerca de 0,1 ms), então tempos muito pequenos são pouco confiáveis.</p>
+    </section>
+
+    <!-- ===== Sobre ===== -->
+    <section id="painel-sobre" role="tabpanel" aria-labelledby="aba-sobre" hidden>
+      <h2>Sobre o projeto</h2>
+      <p>O Sorting Lab nasceu de um trabalho de faculdade em Java que ordenava 150 mil nomes
+        (<a href="https://github.com/Rimuro-Sama/OrdenacoesNomes-Java">OrdenacoesNomes-Java</a>). Aqui a ideia ganhou uma interface:
+        dá para <em>ver</em> cada algoritmo, comparar o custo em diferentes tipos de entrada e ordenar textos em português.</p>
+
+      <h3>Como funciona</h3>
+      <ul>
+        <li>Cada algoritmo é escrito <strong>uma única vez</strong> e passa todas as comparações e escritas por um objeto que conta e grava eventos. O visualizador reproduz os eventos, o benchmark só conta, e os testes automáticos usam o mesmo código.</li>
+        <li>Os dados são gerados a partir de uma <strong>semente</strong>: a mesma semente produz sempre o mesmo array, então a comparação entre algoritmos é justa.</li>
+        <li>O benchmark roda num <strong>Web Worker</strong>, para não travar a página.</li>
+        <li>Textos são ordenados com <code>Intl.Collator('pt-BR')</code>, que trata acentos corretamente (com a comparação simples, "Álvaro" iria para depois de "Zélia").</li>
+      </ul>
+
+      <h3>Limites</h3>
+      <ul>
+        <li>Medir tempo em JavaScript é impreciso: depende do navegador, da máquina e do aquecimento do motor. Por isso a tabela mostra também comparações e escritas.</li>
+        <li>Os algoritmos O(n²) ficam muito lentos acima de ~20.000 elementos.</li>
+        <li>A comparação com <code>Array.prototype.sort</code> do navegador é só uma referência: ele é código nativo, sem a instrumentação.</li>
+      </ul>
+
+      <p><a href="https://github.com/Rimuro-Sama/SortingLab-">Código-fonte no GitHub</a></p>
+    </section>
+  </main>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
