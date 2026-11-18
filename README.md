@@ -98,7 +98,7 @@ A leitura que importa: os algoritmos O(n²) (selection e insertion) fazem **deze
 ## Limites e o que foi verificado
 
 **Verificado, rodando de verdade:**
-- Os 52 testes unitários e os 8 de ponta a ponta passam.
+- Os 52 testes unitários e os 8 de ponta a ponta passam, localmente e no GitHub Actions (os dois jobs do CI, inclusive o que instala o Chromium).
 - Os testes detectam regressões: quebrei de propósito a contagem de escritas na interface e o teste de ponta a ponta falhou; o teste de custo do quicksort pegou o defeito descrito acima.
 
 **Limites:**
