@@ -108,6 +108,10 @@ A leitura que importa: os algoritmos O(n²) (selection e insertion) fazem **deze
 - "Escritas" contam só o array principal. As cópias para o buffer auxiliar do merge sort não entram na conta.
 - Testado apenas no **Chromium** (Linux). Não testei Firefox, Safari nem celulares, e a acessibilidade foi verificada por teclado nas abas, não com leitor de tela.
 
+## Licença
+
+[MIT](LICENSE): você pode usar, copiar e modificar este código, inclusive em projetos comerciais, mantendo o aviso de copyright. O código é fornecido sem garantia.
+
 ## Sobre o desenvolvimento
 
 Projeto pessoal de estudo, feito por mim com apoio do Claude Code para código, testes e revisão. Eu defini o escopo; os testes e as medições foram executados de verdade e os resultados acima são desses testes.
